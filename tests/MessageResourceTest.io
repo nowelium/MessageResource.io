@@ -1,8 +1,6 @@
 MessageResourceTest := UnitTest clone do(
     type := "MessageResourceTest"
     init := method(
-        self lang := System getEnvironmentVariable("LANG")
-        resend
     )
     setUp := method(
     )
@@ -15,7 +13,7 @@ MessageResourceTest := UnitTest clone do(
 
     HogeMessage := MessageResource clone do(
         ja_JP := {
-            SERVER_START := "サーバ #{name} が始動しました"
+            SERVER_START := "サーバ #{name} が始動しました",
             SERVER_STOP := "サーバ #{name} が停止しました"
         }
     )
