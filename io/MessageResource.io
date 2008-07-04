@@ -8,30 +8,28 @@ MessageResource := Object clone do (
         self locale := split at(0)
         self encoding := split at(1)
         self encodeName := self encoding replaceMap(replace)
+        self encodingMessage := ("as" .. encoding) asMessage
     )
     getMessage := method(messageId, params,
         message := self getSlot(locale) getSlot(messageId)
         message interpolateInPlace(params)
     )
     curlyBrackets := method(
-        m := message("as" .. encoding)
         obj := Object clone
-        msgString := call message asString 
-        message := msgString doMessage(m) asMessage
-        message arguments foreach(arg,
+        call message arguments foreach(arg,
             arg setName("setSlot")
             obj doMessage(arg)
         )
         obj
     )
     forward := method(
-        m := message("as" .. "self encoding")
         name := call message name
-        message := self getSlot(locale) getSlot(name) doMessage(m)
+        message := self getSlot(locale) getSlot(name)
         message container := self
+        message encodingMessage := self encodingMessage
         message curlyBrackets := method(
             obj := call delegateTo(container, call sender)
-            self interpolateInPlace(obj)
+            self asMutable doMessage(encodingMessage) interpolateInPlace(obj)
         )
         message
     )
